@@ -5,6 +5,12 @@
     <textarea required class="form-control" maxlength="200" rows="3" placeholder="Description" ng-model="newInput.text"></textarea>
     <input class="btn submit-btn pull-right" type="submit" value="Submit" />
   </form>
-  
+  <div id="post-stream">
+  <div class="input" ng-repeat="input in inputs | orderBy:'created_at':true" ng-class-odd="'odd'" ng-class-even="'even'">
+  		<p>{{input.text}} - {{input.value}}</p>
+  		<small>Posted by @{{input.created_by}}</small>
+  		<small class="pull-right">{{input.created_at | date:"h:mma 'on' MMM d, y"}}</small>
+  	</div>
+  </div>
 </div>
 

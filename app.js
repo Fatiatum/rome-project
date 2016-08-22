@@ -16,7 +16,7 @@ var mongoose = require('mongoose');                         //add for Mongo supp
 var uristring =
   process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
-  'mongodb://localhost/rome-project';
+  'mongodb://localhost/rome';
 
 mongoose.connect(uristring, function (err, res) {
   if (err) {
