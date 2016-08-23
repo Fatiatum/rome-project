@@ -41,6 +41,10 @@ app.factory('factoryService', function($resource){
   return $resource('/api/balance/:id');
 });
 
+app.factory('profileService', function($resource){
+  return $resource('/api/budget/:id');
+});
+
 app.controller('mainController', function($rootScope, $scope, factoryService, $location){
   if(!$rootScope.authenticated){
     $location.path('/');
@@ -59,19 +63,19 @@ app.controller('mainController', function($rootScope, $scope, factoryService, $l
 	};
 });
 
-app.controller('profileController', function($rootScope, $scope, factoryService, $location){
+app.controller('profileController', function($rootScope, $scope, profileService, $location){
   if(!$rootScope.authenticated){
     $location.path('/');
   }
 
-  $scope.budgets = factoryService.query();
+  $scope.budgets = profileService.query();
   $scope.newBudget = {created_by: '', name: '', created_at: ''};
 
   $scope.addBudget = function(){
     $scope.newBudget.created_by = $rootScope.current_user;
     $scope.newBudget.created_at = Date.now();
-    factoryService.save($scope.newBudget, function(){
-      $scope.budgets = factoryService.query();
+    profileService.save($scope.newBudget, function(){
+      $scope.budgets = profileService.query();
       $scope.newBudget = {created_by: '', name: '', created_at: ''};
     });
   };

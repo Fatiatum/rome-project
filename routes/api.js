@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require( 'mongoose' );
 var Balance = mongoose.model('Balance');
+var Budget = mongoose.model('Budget');
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -40,9 +41,7 @@ router.route('/balance')
 	})
 	//gets all inputs
 	.get(function(req, res){
-		console.log('debug1');
 		Balance.find(function(err, inputs){
-			console.log('debug2');
 			if(err){
 				return res.send(500, err);
 			}
@@ -81,6 +80,70 @@ router.route('/balance/:id')
 	//deletes the input
 	.delete(function(req, res) {
 		Balance.remove({
+			_id: req.params.id
+		}, function(err) {
+			if (err)
+				res.send(err);
+			res.json("deleted :(");
+		});
+	});
+
+router.use('/budget', isAuthenticated);
+
+router.route('/budget')
+	//creates a new budget
+	.post(function(req, res){
+
+		var budget = new Budget();
+		budget.name = req.body.name;
+		budget.created_by = req.body.created_by;
+		budget.save(function(err, budget) {
+			if (err){
+				return res.send(500, err);
+			}
+			return res.json(budget);
+		});
+	})
+	//gets all budgets
+	.get(function(req, res){
+		Budget.find(function(err, budgets){
+			if(err){
+				return res.send(500, err);
+			}
+			return res.send(200,budgets);
+		});
+	});
+
+//budget-specific commands. likely won't be used
+router.route('/budget/:id')
+	//gets specified budget
+	.get(function(req, res){
+		Budget.findById(req.params.id, function(err, budget){
+			if(err)
+				res.send(err);
+			res.json(budget);
+		});
+	}) 
+	//updates specified budget
+	.put(function(req, res){
+		Budget.findById(req.params.id, function(err, budget){
+			if(err)
+				res.send(err);
+
+			budget.created_by = req.body.created_by;
+			budget.name = req.body.name;
+
+			budget.save(function(err, budget){
+				if(err)
+					res.send(err);
+
+				res.json(budget);
+			});
+		});
+	})
+	//deletes the budget
+	.delete(function(req, res) {
+		Budget.remove({
 			_id: req.params.id
 		}, function(err) {
 			if (err)
