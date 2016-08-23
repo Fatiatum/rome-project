@@ -13,25 +13,7 @@ var api = require('./routes/api');
 var authenticate = require('./routes/authenticate')(passport);
 var mongoose = require('mongoose');                         //add for Mongo support
 
-if (process.env.NODE_ENV === 'development'){
-    mongoose.connect('mongodb://localhost/rome');
-}
-else{
-    mongoose.connect('mongodb://rome:rome1234@ds013456.mlab.com:13456/rome-project');
-}
-
-// var uristring =
-//   process.env.MONGOLAB_URI ||
-//   process.env.MONGOHQ_URL ||
-//   'mongodb://localhost/rome';
-
-// mongoose.connect(uristring, function (err, res) {
-//   if (err) {
-//     console.log ('ERROR connecting to: ' + uristring + '. ' + err);
-//   } else {
-//     console.log ('Succeeded connected to: ' + uristring);
-//   }
-// });
+mongoose.connect('mongodb://rome:rome1234@ds013456.mlab.com:13456/rome-project');
 
 var app = express();
 
