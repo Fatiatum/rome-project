@@ -1,1 +1,16 @@
-<p>My profile</p>
+<p>Hello {{current_user}}</p>
+
+<div class="clearfix">
+  <form ng-Submit="addBudget()">
+    <input required  type="string" class="form-control" placeholder="Name" ng-model="newBudget.name"/> 
+    <input class="btn submit-btn pull-right" type="submit" value="Submit" />
+  </form>
+
+  <div id="post-stream">
+    <div class="budget" ng-repeat="budget in budgets | orderBy:'created_at':true" 
+    	 				ng-class-odd="'odd'" ng-class-even="'even'">
+  		<p>{{budget.name}}</p>
+  		<small class="pull-right">{{budget.created_at | date:"h:mma 'on' MMM d, y"}}</small>
+  	</div>
+  </div>
+</div>

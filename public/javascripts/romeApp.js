@@ -13,8 +13,7 @@ app.config(function($routeProvider){
   $routeProvider
     //the timeline display
     .when('/', {
-      templateUrl: 'main.html',
-      controller: 'mainController'
+      templateUrl: 'main.html'
     })
     //the main display
     .when('/budget', {
@@ -42,7 +41,11 @@ app.factory('factoryService', function($resource){
   return $resource('/api/balance/:id');
 });
 
-app.controller('mainController', function($rootScope, $scope, factoryService){
+app.controller('mainController', function($rootScope, $scope, factoryService, $location){
+  if(!$rootScope.authenticated){
+    $location.path('/');
+  }
+
   $scope.inputs = factoryService.query();
 	$scope.newInput = {created_by: '', value: '', text: '', created_at: ''};
 
@@ -54,6 +57,24 @@ app.controller('mainController', function($rootScope, $scope, factoryService){
       $scope.newInput = {created_by: '', value: '', text: '', created_at: ''};
     });
 	};
+});
+
+app.controller('profileController', function($rootScope, $scope, factoryService, $location){
+  if(!$rootScope.authenticated){
+    $location.path('/');
+  }
+
+  $scope.budgets = factoryService.query();
+  $scope.newBudget = {created_by: '', name: '', created_at: ''};
+
+  $scope.addBudget = function(){
+    $scope.newBudget.created_by = $rootScope.current_user;
+    $scope.newBudget.created_at = Date.now();
+    factoryService.save($scope.newBudget, function(){
+      $scope.budgets = factoryService.query();
+      $scope.newBudget = {created_by: '', name: '', created_at: ''};
+    });
+  };
 });
 
 app.controller('authController', function($scope, $http, $rootScope, $location){
