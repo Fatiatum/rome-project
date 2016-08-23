@@ -1,4 +1,4 @@
-var app = angular.module('romeApp', ['ngRoute', 'ngResource']).run(function($rootScope) {
+var app = angular.module('romeApp', ['ngRoute', 'ngResource']).run(function($rootScope, $http) {
   $rootScope.authenticated = false;
   $rootScope.current_user = '';
   
@@ -15,6 +15,16 @@ app.config(function($routeProvider){
     .when('/', {
       templateUrl: 'main.html',
       controller: 'mainController'
+    })
+    //the main display
+    .when('/budget', {
+      templateUrl: 'budget.html',
+      controller: 'mainController'
+    })
+    //the profile display
+    .when('/profile', {
+      templateUrl: 'profile.html',
+      controller: 'profileController'
     })
     //the login display
     .when('/login', {
